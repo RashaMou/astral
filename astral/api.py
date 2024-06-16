@@ -26,13 +26,19 @@ class API:
     def handle_request(self, request):
         response = Response()
 
-        for path, handler in self.routes.items():
-            if path == request.path:
-                handler(request, response)
-                return response
+        handler = self.find_handler(request.path)
 
-        self.default_response(response)
+        if handler is not None:
+            handler(request, response)
+        else:
+            self.default_response(response)
+
         return response
+
+    def find_handler(self, req_path):
+        for path, handler in self.routes.items():
+            if path == req_path:
+                return handler
 
     def default_response(self, response):
         response.status_code = 404

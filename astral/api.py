@@ -1,6 +1,11 @@
+from webob import Request, Response
+
 class API:
     def __call__(self, environ, start_response):
-        response_body = b"Hello, world!"
-        status = "200 OK"
-        start_response(status, headers=[])
-        return iter([response_body])
+        # the environ dictionary contains all the details of the incoming HTTP
+        # request.
+        request = Request(environ)
+        response = Response()
+        response.text = "Hello, world!"
+
+        return response(environ, start_response)

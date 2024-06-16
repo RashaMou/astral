@@ -5,7 +5,15 @@ class API:
         # the environ dictionary contains all the details of the incoming HTTP
         # request.
         request = Request(environ)
-        response = Response()
-        response.text = "Hello, world!"
+        response = self.handle_request(request)
 
         return response(environ, start_response)
+
+    def handle_request(self, request):
+        user_agent = request.environ.get("HTTP_USER_AGENT", "No user agent found")
+
+        response = Response()
+        response.text = f"Hello friend with this user agent: {user_agent}"
+
+        return response
+

@@ -2,11 +2,14 @@
 name = "astral"
 version = "0.1.0"
 description = ""
-authors = ["Rasha Moumneh <rasha@fastmailteam.com>"]
+authors = ["Rasha Moumneh <rasha@rasha.dev>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+parse = "^1.20.2"
+gunicorn = "^22.0.0"
+webob = "^1.8.7"
 
 
 [build-system]

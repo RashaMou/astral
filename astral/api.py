@@ -17,6 +17,8 @@ class API:
         return response(environ, start_response)
 
     def route(self, path):
+        if path in self.routes.keys():
+            raise AssertionError(f"{path} route already exists")
         # handlers are the route functions in app.py
         def wrapper(handler):
             self.routes[path] = handler
@@ -39,7 +41,6 @@ class API:
     def find_handler(self, req_path):
         for path, handler in self.routes.items():
             parse_result = parse(path, req_path)
-            # print(parse_result.named)
             if parse_result is not None:
                 return handler, parse_result.named
         return None, None

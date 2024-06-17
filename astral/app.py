@@ -13,3 +13,13 @@ def about(request, response):
 @app.route("/hello/{name}")
 def greeting(request, response, name):
     response.text = f"Hello, {name}"
+
+@app.route("/tell/{age:d}")
+def age(request, response, age):
+    response.text = f"You are {age} years old"
+
+@app.route("/sum/{num_1:d}/{num_2:d}")
+def sum(request, response, num_1, num_2):
+    sum = num_1 + num_2
+    response.text = f"{num_1} + {num_2} = {sum}"
+

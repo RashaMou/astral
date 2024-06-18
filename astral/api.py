@@ -1,13 +1,24 @@
 from parse import parse
 import inspect
 from webob import Request, Response
+import os
+from jinja2 import Environment, FileSystemLoader
 
 class API:
-    def __init__(self):
+    def __init__(self, templates_dir=None):
         """
         routes stores paths as keys and handlers as values
         """
         self.routes = {}
+
+        if templates_dir is None:
+            templates_dir = os.path.join(os.path.dirname(__file__), 'templates')
+
+        self.templates_env = Environment(
+            loader=FileSystemLoader(os.path.abspath(templates_dir))
+        )
+
+        self.exception_handler = None
 
     def __call__(self, environ, start_response):
         # the environ dictionary contains all the details of the incoming HTTP
@@ -58,3 +69,10 @@ class API:
     def default_response(self, response):
         response.status_code = 404
         response.text = "No potato"
+
+
+    def template(self, template_name, context=None):
+        if context is None:
+            context={}
+
+        return self.templates_env.get_template(template_name).render(**context)

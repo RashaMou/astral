@@ -31,6 +31,15 @@ class BooksResource:
     def post(self, req, res):
         res.text = "Endpoint to create a book"
 
+@app.route("/template")
+def template_handler(req, res):
+    # res.body expects bytes, but the template method returns a unicode string,
+    # so we need to encode()
+    res.body = app.template(
+        "index.html",
+        context={"name": "Astral", "title": "number 1 framework"}
+    ).encode()
+
 def handler(req, res):
     res.text = "sample"
 

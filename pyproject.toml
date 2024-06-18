@@ -10,6 +10,8 @@ python = "^3.12"
 parse = "^1.20.2"
 gunicorn = "^22.0.0"
 webob = "^1.8.7"
+pytest = "^8.2.2"
+webtest = "^3.0.0"
 
 
 [build-system]

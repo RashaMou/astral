@@ -1,0 +1,2 @@
+[run]
+omit = venv/*,tests/test_astral.py,tests/conftest.py,astral/app.py,astral/wsgi_demo.py,*/__init__.py

@@ -40,7 +40,15 @@ def template_handler(req, res):
         context={"name": "Astral", "title": "number 1 framework"}
     ).encode()
 
+@app.route("/exception")
+def exception_throwing_handle(req, res):
+    raise AssertionError("This handler should not be used")
+
+def custom_exception_handler(req, res, exception_cls):
+    res.text = str(exception_cls)
+
 def handler(req, res):
     res.text = "sample"
 
 app.add_route("/sample", handler)
+app.add_exception_handler(custom_exception_handler)

@@ -46,16 +46,20 @@ class API:
 
         handler, kwargs = self.find_handler(request.path)
 
-        if handler is not None:
-            if inspect.isclass(handler):
-                handler = getattr(handler(), request.method.lower(), None)
-                if handler is None:
-                    raise AttributeError("Method not allowed", request.method)
+        try:
+            if handler is not None:
+                if inspect.isclass(handler):
+                    handler = getattr(handler(), request.method.lower(), None)
+                    if handler is None:
+                        raise AttributeError("Method not allowed", request.method)
                 handler(request, response, **kwargs)
             else:
-                handler(request, response, **kwargs)
-        else:
-            self.default_response(response)
+                self.default_response(response)
+        except Exception as e:
+            if self.exception_handler is None:
+                raise e
+            else:
+                self.exception_handler(request, response, e)
 
         return response
 
@@ -76,3 +80,6 @@ class API:
             context={}
 
         return self.templates_env.get_template(template_name).render(**context)
+
+    def add_exception_handler(self, exception_handler):
+        self.exception_handler = exception_handler

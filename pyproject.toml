@@ -13,6 +13,7 @@ webob = "^1.8.7"
 pytest = "^8.2.2"
 webtest = "^3.0.0"
 pytest-cov = "^5.0.0"
+jinja2 = "^3.1.4"
 
 
 [build-system]

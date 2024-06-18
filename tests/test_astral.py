@@ -69,3 +69,37 @@ def test_class_based_handlers_not_allowed_method(api, client):
 
     with pytest.raises(AttributeError):
         client.get("/books")
+
+def test_alternative_route(api, client):
+    RESPONSE_TEXT = "Alternative way to add a route"
+
+    def home(req, res):
+        res.text = RESPONSE_TEXT
+
+    api.add_route("/alternative", home)
+    assert client.get("/alternative").text == RESPONSE_TEXT
+
+def test_template(api, client):
+    @api.route("/html")
+    def html_handler(req, res):
+        res.body = api.template("index.html", context={"title": "River", "name": "Sea"}).encode()
+
+    response = client.get("/html")
+    assert "text/html" in response.headers["Content-Type"]
+    assert "River" in response.text
+    assert "Sea" in response.text
+
+def test_custom_exception_handler(api, client):
+    # when an attributeerror is raised in a handler, it is caught by the custom
+    # exception handler and its text is changed
+    def on_exception(req, res, exc):
+        res.text = "AttributeErrorHappened"
+
+    api.add_exception_handler(on_exception)
+
+    @api.route("/")
+    def index(req, res):
+        raise AttributeError
+
+    response = client.get("/")
+    assert response.text == "AttributeErrorHappened"
